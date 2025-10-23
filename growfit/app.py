@@ -86,6 +86,23 @@ class NewExcercise(Screen):
         self.reps(layout)
         self.add_widget(layout)
 
+    def sets(self, layout):
+        """ Configuración de botones y etiqueta de sets """
+
+        self.label = Label(text=f"Sets: {self.counter}", font_size=30)
+        layout.add_widget(self.label)
+
+        # Botón +1
+        btn = Button(text="+1", size_hint=(1, 0.3))
+        btn.bind(on_press=self.on_increment)
+        layout.add_widget(btn)
+
+        # Botón -1
+        btn2 = Button(text="-1", size_hint=(1, 0.3))
+        btn2.bind(on_press=self.on_decrement)
+        layout.add_widget(btn2)
+
+
     def reps(self, layout):
         """ Configuración de botones y etiqueta de repeticiones """
 
@@ -107,10 +124,6 @@ class NewExcercise(Screen):
         btn3.bind(on_press=self.on_reset)
         layout.add_widget(btn3)
 
-        # Botón Atrás
-        btn4 = Button(text="Atrás", size_hint=(1, 0.3))
-        btn4.bind(on_press=self.go_back)
-        layout.add_widget(btn4)
 
     def on_increment(self, instance):
         self.counter = uc.increment_counter(self.counter)

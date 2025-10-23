@@ -8,15 +8,24 @@
 
 ## Vision
 
-GrowFit is an intelligent fitness application designed to create personalized workout experiences through advanced data analytics and machine learning. The app learns from user behavior patterns and collaborative data to recommend optimal workout routines and guide progressive improvement.
+GrowFit is your personal training companion that grows with you. More than a fitness tracker, it's an intelligent assistant that learns from your performance and guides your progression journey with adaptive recommendations.
+
+The app combines data analytics and machine learning to act as your gym buddy - tracking your workouts, recognizing when you're ready for the next challenge, and motivating you to push your limits at your own pace.
+
+### Core Philosophy
+
+**Progressive Overload Made Smart**: Instead of generic workout plans, GrowFit analyzes YOUR performance patterns and recommends the next difficulty step when you're consistently ready for it.
+
+**Example**: Master knee push-ups for 3 sessions? GrowFit suggests moving to full push-ups. Crushing diamond push-ups? Time for archer variations. The system adapts to your unique progression speed.
 
 ### Key Features (Planned)
 
-- **AI-Powered Recommendations**: Personalized workout suggestions based on user data and community insights
-- **Advanced Analytics**: Comprehensive tracking of workout performance, adherence, and progression
-- **Adaptive Progression**: Smart exercise difficulty adjustment based on user performance
+- **Adaptive Progression System**: Exercise difficulty progressions (1-10 scale) with prerequisite tracking
+- **Performance-Based Recommendations**: ML model analyzes your consistency and suggests next-level exercises when you're ready
+- **Motivation & Gamification**: Unlock achievements, track streaks, celebrate milestones
+- **Exercise Progression Database**: Curated exercise chains from beginner to advanced (e.g., Push-up variations, L-Sit progressions, etc.)
+- **Smart Analytics**: Track not just what you did, but how you're improving over time
 - **Cross-Platform**: Built with mobile-first approach using Python and Kivy
-- **Goal-Oriented Training**: Customizable fitness goals with intelligent progression paths
 
 ## Current Status
 
@@ -28,25 +37,27 @@ GrowFit is an intelligent fitness application designed to create personalized wo
 - Device identification system for user tracking
 
 ### In Development
+- Exercise progression database with difficulty levels and prerequisites
+- Performance tracking for progression triggers
 - Timer functionality for rest periods and hold exercises
-- Exercise database with categorization and difficulty levels
 - Routine creation and management system
 
 ### Planned Features
-- Machine learning recommendation engine
-- Nutrition tracking and calculation system
-- Progress analytics and visualization
-- Community-based collaborative filtering
-- Export/import functionality for workout data
+- ML recommendation engine for progression suggestions
+- Motivation system (streaks, achievements, milestones)
+- Progress visualization and analytics dashboard (Power BI integration)
+- Exercise tutorial/demo system for new progressions
+- Community-driven exercise database expansion
 
 ## Technology Stack
 
 - **Backend**: Python 3.13+ (backward compatible to 3.8+)
 - **UI Framework**: Kivy (cross-platform GUI)
 - **Data Processing**: Pandas (CSV handling)
+- **Analytics**: Power BI (visualization and feature engineering)
+- **Machine Learning**: Scikit-learn (progression recommendation models)
 - **Threading**: Built-in threading for device ID generation
-- **Future ML**: Scikit-learn (planned)
-- **Data Storage**: CSV-based (SQLite migration planned)
+- **Data Storage**: CSV-based (historical data for ML training)
 - **Package Management**: setuptools (pip installable)
 
 ## Project Structure
@@ -169,11 +180,30 @@ Files with `_data.csv` suffix collect historical records for machine learning mo
 
 ## Roadmap
 
-1. **Phase 1**: Core functionality (Exercise tracking, Timers) ✅
-2. **Phase 2**: Enhanced UI and routine management 🚧
-3. **Phase 3**: Data analytics and basic recommendations
-4. **Phase 4**: Machine learning integration
-5. **Phase 5**: Mobile deployment and advanced features
+### Phase 1: Foundation ✅
+- Core tracking functionality (reps, sets, time)
+- Data management and storage system
+- Basic UI navigation
+
+### Phase 2: Progression System 🚧
+- Exercise database with difficulty levels (1-10)
+- Progression chains (prerequisite → current → next)
+- Performance tracking and history
+
+### Phase 3: Intelligence Layer
+- ML model for progression recommendations
+- Trigger detection (consistency → ready for next level)
+- Power BI analytics dashboard
+
+### Phase 4: Motivation & Engagement
+- Gamification (achievements, streaks, unlocks)
+- Progress visualization
+- Milestone celebrations
+
+### Phase 5: Expansion
+- Exercise database validation with fitness professionals
+- Community contributions
+- Advanced features and mobile optimization
 
 ## License
 
