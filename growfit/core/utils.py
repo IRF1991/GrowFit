@@ -9,3 +9,11 @@ def reduce_counter(counter):
     if counter <= 0:
         return 0
     return counter - 1
+
+def count_down(counter):
+    """Count down the last counter by 1 every second until it reaches 0.
+        It will be used to manage the countdown timer during exercises, rest between sets and timers.
+    """
+    while counter > 0:
+        counter = reduce_counter(counter)
+        yield counter
