@@ -41,19 +41,63 @@ GrowFit is an intelligent fitness application designed to create personalized wo
 
 ## Technology Stack
 
-- **Backend**: Python 3.8+
-- **UI Framework**: Kivy
-- **Data Processing**: Pandas
+- **Backend**: Python 3.13+ (backward compatible to 3.8+)
+- **UI Framework**: Kivy (cross-platform GUI)
+- **Data Processing**: Pandas (CSV handling)
+- **Threading**: Built-in threading for device ID generation
 - **Future ML**: Scikit-learn (planned)
 - **Data Storage**: CSV-based (SQLite migration planned)
+- **Package Management**: setuptools (pip installable)
+
+## Project Structure
+
+```
+GrowFit/
+├── growfit/                    # Main package
+│   ├── __init__.py
+│   ├── app.py                  # Main application entry point
+│   ├── config/                 # Configuration files
+│   │   ├── __init__.py
+│   │   └── settings.py         # App settings and constants
+│   ├── core/                   # Core functionality
+│   │   ├── __init__.py
+│   │   ├── data_manager.py     # Data management and device ID
+│   │   └── utils.py            # Utility functions (counters)
+│   ├── models/                 # Data models
+│   │   ├── __init__.py
+│   │   ├── exercise.py         # Exercise model (original: excercise.py)
+│   │   └── routine.py          # Routine model
+│   ├── services/               # Business logic services
+│   │   ├── __init__.py
+│   │   ├── routine_manager.py  # Routine management (original: routines/manager.py)
+│   │   ├── series.py           # Series management (original: routines/series.py)
+│   │   └── timer.py            # Timer functionality (original: timer/timer.py)
+│   └── ui/                     # User interface (reserved for future)
+│       └── __init__.py
+├── tests/                      # Test suite
+│   ├── test_core/             # Core functionality tests
+│   ├── test_models/           # Model tests
+│   ├── integration/           # Integration tests
+│   └── __pycache__/
+├── data/                      # Data files (CSV storage)
+│   ├── app_lifecycle_data.csv
+│   ├── device_id.txt
+│   ├── exercise_data.csv
+│   ├── routines_data.csv
+│   ├── session_data.csv
+│   └── user_profile.csv
+├── requirements.txt           # Production dependencies
+├── setup.py                   # Package installation
+└── README.md                  # This file
+```
 
 ## Installation
 
 ### Prerequisites
-- Python 3.8 or higher
+- Python 3.13+ (recommended) or 3.8+
 - pip package manager
 
-### Setup
+### Quick Start
 ```bash
 # Clone the repository
 git clone https://github.com/IRF1991/GrowFit.git
@@ -71,70 +115,65 @@ pip install -r requirements.txt
 pip install -e .
 
 # Run the application
-python main.py
+python growfit/app.py
 ```
 
-### Development Setup
-```bash
-# Install development dependencies
-pip install -r requirements-dev.txt
 
-# Run tests
-python tests/test_core/test_data_manager.py
+## Data Storage
 
-# Run integration tests
-python tests/integration/test_app.py
-```
+The application uses CSV files for data persistence:
 
-## Requirements
+### Dynamic Data (Active Configuration)
+- **`user_profile.csv`**: User demographics and fitness experience levels
+- **`routines.csv`**: Workout routine definitions and metadata  
+- **`device_id.txt`**: Unique device identifier for user/testing distinction
 
-```
-pandas>=2.0.0
-kivy>=2.1.0
-```
+### Historical Data (ML Training Data)
+Files with `_data.csv` suffix collect historical records for machine learning model training:
+- **`exercise_data.csv`**: Detailed exercise tracking and performance data
+- **`session_data.csv`**: Workout session timestamps and completion status
+- **`routines_data.csv`**: Routine execution history and statistics
+- **`app_lifecycle_data.csv`**: App usage patterns and user retention analytics
 
 ## Development Setup
 
 ### INFORMACIÓN IMPORTANTE PARA DEVS
 
-**El DataManager permite distinguir entre usuarios reales y usuarios de testing para preservar la integridad de los datos y facilitar pruebas por desarrolladores.**
+**The DataManager (located in `growfit/core/data_manager.py`) distinguishes between real users and testing users to preserve data integrity and facilitate developer testing.**
 
-#### Objetivo:
-- Permitir que un desarrollador tenga su propia versión de usuario marcada como testing
-- Evitar que datos de prueba interfieran con los datos reales del usuario
+#### Purpose:
+- Allow developers to have their own testing user version
+- Prevent test data from interfering with real user data
 
-#### Cómo funciona:
-1. Al ejecutar la app en un dispositivo nuevo sin `device_id.txt`, la consola pregunta: **`¿Modo Testing? (y/N):`** para generar un ID único
-2. **"y"** genera un device_id de testing con prefijo `te_` (ej. `te_7d95bb60`)
-3. **Cualquier otra cosa** genera un device_id de usuario normal con prefijo `us_` (ej. `us_a0d27a7a`)
-4. **Si se pulsa el botón "Nueva Rutina"**, se generará automáticamente un device_id de usuario
+#### How it works:
+1. When running the app on a new device without `device_id.txt`, the console asks: **`¿Modo Testing? (y/N):`** to generate a unique ID
+2. **"y"** generates a testing device_id with prefix `te_` (e.g., `te_7d95bb60`)
+3. **Any other input** generates a normal user device_id with prefix `us_` (e.g., `us_a0d27a7a`)
+4. **If the "Nueva Rutina" button is pressed**, a user device_id will be automatically generated
 
-**El device_id se guarda en `data/device_id.txt` para mantenerlo entre sesiones.**
+**The device_id is saved in `data/device_id.txt` to maintain it between sessions.**
+
 
 #### User Types Summary:
 - **Real Users**: Device ID prefix `us_` (e.g., `us_a0d27a7a`)
 - **Testing Users**: Device ID prefix `te_` (e.g., `te_7d95bb60`)
 
-## Data Architecture
 
-The application uses a comprehensive CSV-based data system designed for future ML implementation:
 
-- **User Profiles**: Physical data and experience levels
-- **Routines**: Workout structure and metadata
-- **Exercises**: Detailed exercise configurations and tracking
-- **Sessions**: Historical workout data for analytics
-- **Lifecycle**: App usage patterns and retention analysis
 
-## Contributing
 
-This project is currently in active development as a portfolio piece. Feel free to explore the code and provide feedback!
+## Branches
+
+- **`main`**: Stable code
+- **`testing`**: Development
 
 ## Roadmap
 
-1. **Phase 1**: Core functionality (Exercise tracking, Timers)
-2. **Phase 2**: Data analytics and basic recommendations
-3. **Phase 3**: Machine learning integration
-4. **Phase 4**: Mobile deployment and advanced features
+1. **Phase 1**: Core functionality (Exercise tracking, Timers) ✅
+2. **Phase 2**: Enhanced UI and routine management 🚧
+3. **Phase 3**: Data analytics and basic recommendations
+4. **Phase 4**: Machine learning integration
+5. **Phase 5**: Mobile deployment and advanced features
 
 ## License
 
@@ -142,9 +181,5 @@ This project is for educational and portfolio purposes.
 
 ## Author
 
-**Ismael** - *Initial work* - [GitHub Profile](https://github.com/IRF1991)
-
----
-
-*GrowFit - Where fitness meets intelligence*
+**Ismael** - [GitHub](https://github.com/IRF1991)
 
