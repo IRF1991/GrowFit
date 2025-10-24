@@ -66,41 +66,90 @@ The app combines data analytics and machine learning to act as your gym buddy - 
 GrowFit/
 ├── growfit/                    # Main package
 │   ├── __init__.py
-│   ├── app.py                  # Main application entry point
+│   ├── app.py                  # Main application logic and Kivy App class
+│   ├── main.py                 # Entry point to run the app
 │   ├── config/                 # Configuration files
 │   │   ├── __init__.py
 │   │   └── settings.py         # App settings and constants
 │   ├── core/                   # Core functionality
 │   │   ├── __init__.py
 │   │   ├── data_manager.py     # Data management and device ID
-│   │   └── utils.py            # Utility functions (counters)
+│   │   └── utils.py            # Utility functions (counters, helpers)
 │   ├── models/                 # Data models
 │   │   ├── __init__.py
-│   │   ├── exercise.py         # Exercise model (original: excercise.py)
+│   │   ├── exercise.py         # Exercise model
 │   │   └── routine.py          # Routine model
 │   ├── services/               # Business logic services
 │   │   ├── __init__.py
-│   │   ├── routine_manager.py  # Routine management (original: routines/manager.py)
-│   │   ├── series.py           # Series management (original: routines/series.py)
-│   │   └── timer.py            # Timer functionality (original: timer/timer.py)
-│   └── ui/                     # User interface (reserved for future)
-│       └── __init__.py
+│   │   ├── routine_manager.py  # Routine management
+│   │   ├── series.py           # Series management
+│   │   └── timer.py            # Timer functionality
+│   └── ui/
+│       └── screens/            # Modular Kivy screens
+│           ├── main_screen.py
+│           ├── new_exercise_screen.py
+│           ├── new_routine_screen.py
+│           ├── timer_screen.py
+│           ├── pop_up_screen.py
+│           ├── exercise_screen.py
+│           └── routine_screen.py
 ├── tests/                      # Test suite
-│   ├── test_core/             # Core functionality tests
-│   ├── test_models/           # Model tests
-│   ├── integration/           # Integration tests
+│   ├── test_core/
+│   ├── test_models/
+│   ├── integration/
 │   └── __pycache__/
-├── data/                      # Data files (CSV storage)
+├── data/                       # Data files (CSV storage)
 │   ├── app_lifecycle_data.csv
 │   ├── device_id.txt
 │   ├── exercise_data.csv
 │   ├── routines_data.csv
 │   ├── session_data.csv
 │   └── user_profile.csv
-├── requirements.txt           # Production dependencies
-├── setup.py                   # Package installation
-└── README.md                  # This file
+├── requirements.txt            # Production dependencies
+├── setup.py                    # Package installation
+└── README.md                   # This file
 ```
+
+## Application Architecture
+
+- **app.py**: Defines the main Kivy App class, configures the ScreenManager, and imports modular screens from `ui/screens`. Handles global UI settings and navigation.
+- **main.py**: Entry point for running the app. Imports and executes the app from `app.py`.
+- **ui/screens/**: Each screen is a separate Python file, containing its own logic and UI definition. This keeps the code modular and maintainable.
+- **core/utils.py**: Centralizes utility functions for use across screens and modules.
+- **DataManager**: Handles device/user identification and data integrity.
+
+## How Screens Work
+- Each screen (e.g., `MainScreen`, `NewExerciseScreen`, `NewRoutineScreen`) is defined in its own file in `ui/screens/` and inherits from Kivy's `Screen` class.
+- Screens are imported and registered in `app.py` via the ScreenManager.
+- Navigation between screens is handled by the ScreenManager, with each screen responsible for its own UI and logic.
+- Utility functions are imported from `core/utils.py` as needed.
+
+## Example Entry Point (main.py)
+```python
+from growfit.app import run_app
+
+if __name__ == "__main__":
+    run_app()
+```
+
+## Example Screen Import (app.py)
+```python
+from growfit.ui.screens.main_screen import MainScreen
+from growfit.ui.screens.new_exercise_screen import NewExerciseScreen
+from growfit.ui.screens.new_routine_screen import NewRoutineScreen
+# ...
+```
+
+## Summary of Changes
+- Modularized screens for maintainability and clarity.
+- Centralized utility functions in `core/utils.py`.
+- Separated app logic (`app.py`) from entry point (`main.py`).
+- Updated naming for consistency (e.g., `new_exercise_screen.py`).
+- Removed unnecessary files (e.g., redundant `__init__.py` in screens).
+
+---
+
+This structure makes the app easier to maintain, extend, and understand, following professional Python and Kivy project standards.
 
 ## Installation
 
