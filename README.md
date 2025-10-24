@@ -146,6 +146,53 @@ Files with `_data.csv` suffix collect historical records for machine learning mo
 - **`routines_data.csv`**: Routine execution history and statistics
 - **`app_lifecycle_data.csv`**: App usage patterns and user retention analytics
 
+### Data Handling Approaches
+
+#### Dynamic CSVs
+- **Purpose:** Store temporary or real-time data that does not require advanced analysis.
+- **Implementation:** Use `with` along with `**kwargs` to handle these files in a lightweight and customized way.
+- **Advantages:**
+  - Lightweight and straightforward.
+  - Ideal for quick operations like saving or reading small data fragments.
+  - Full control over how data is handled.
+
+**Example:**
+```python
+# Save data to a dynamic CSV
+def save_to_csv(file_path, data, **kwargs):
+    with open(file_path, 'w') as file:
+        for row in data:
+            file.write(','.join(str(row[key]) for key in kwargs.keys()) + '\n')
+```
+
+#### Historical CSVs
+- **Purpose:** Store accumulated or historical data that requires advanced analysis.
+- **Implementation:** Use the Pandas library to efficiently handle these files and perform complex analyses.
+- **Advantages:**
+  - Optimized for large volumes of data.
+  - Advanced tools for filtering, grouping, and transforming data.
+  - Simplifies the handling of tabular data.
+
+**Example:**
+```python
+import pandas as pd
+
+# Analyze historical data
+def analyze_history(file_path, **kwargs):
+    df = pd.read_csv(file_path)
+    for key, value in kwargs.items():
+        df = df[df[key] == value]  # Filter based on kwargs
+    return df.describe()  # Example: descriptive statistics
+```
+
+#### Workflow
+1. **Save dynamic data:** Use `with` to write data to dynamic CSVs quickly and efficiently.
+2. **Read and analyze historical data:** Use Pandas to load historical CSVs, filter relevant data, and perform advanced analyses.
+3. **Integration:** Combine both approaches depending on the type of data being handled:
+   - **Real-time or temporary data:** `with` + `**kwargs`.
+   - **Accumulated or historical data:** Pandas.
+```
+
 ## Development Setup
 
 ### INFORMACIÓN IMPORTANTE PARA DEVS

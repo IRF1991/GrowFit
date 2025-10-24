@@ -44,6 +44,9 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.label import Label
+from kivy.uix.widget import Widget
+from kivy.graphics import Color, Rectangle
+from kivy.core.window import Window
 
 
 # General settings
@@ -63,8 +66,22 @@ class MyApp(App):
 
     def build(self):
         sm = MyScreenManager()
+    
+        # Set a dark purple dynamic background color
+
+        with sm.canvas.before:
+            self.bg_color = Color(0.2, 0.0, 0.4, 1)  # Dark purple
+            self.bg_rect = Rectangle(size=Window.size, pos=(0, 0))
+            
+        Window.bind(size=self.update_background)
+
         self.add_screens(sm)
         return sm
+
+    def update_background(self, *args):
+        """Update the background size and position dynamically."""
+        self.bg_rect.size = Window.size
+        self.bg_rect.pos = (0, 0)
 
     def add_screens(self, sm):
         """ Add all screens to the ScreenManager """
