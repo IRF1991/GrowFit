@@ -5,45 +5,20 @@ import threading
 
 class DataManager:
     """
-    Sistema de gestión centralizado para CSVs del proyecto.
-    - Carga los CSVs DINÁMICOS necesarios al iniciar la app, otros CSVs se cargarán bajo demanda.
-    - Genera un device_id único si no existe.
-    - Ofrece métodos flexibles para cargar y guardar datos dinámicamente.
-    
-    - función: __init__: Constructor de clase. Inicializa el objeto DataManager y prepara la estructura de datos para toda la app.
-        
-        - self.data_dir: define la carpeta donde se almacenan los CSVs. Por defecto, "data/".
-        - os.makedirs(self,data_dir,exist_ok=True): crea la carpeta data/ si no existe, si ya existe no hace nada.
-        - self.device_id = self._load_or_create_device_id(): llama a la función que carga o genera un device_id único.
-        - self.csv_map{}: define los CSV que se cargarán al inicio. Estos CSV serán: user_profile.csv, routines.csv y session_data.csv.
-        - self.dataframes{}: prepara un diccionario para almacenar los DataFrames cargados de cada CSV.
-        - _load_csv(path): función interna que carga un CSV existente dado su path y devuelve un DataFrame. Si el CSV no existe, lanza una excepción.
-        
-    - función: _load_or_create_device_id(self): Carga el device_id único desde el dispositivo o lo genera si no existe.
-    
-        - Comprueba si existe un archivo device_id.txt en la carpeta data/.
-        - Si existe, lee el device_id desde el archivo.
-        - Si no existe, solicita al usuario que seleccione el tipo de usuario y genera un device_id basado en el tipo de usuario y un UUID.
-        - Si la respuesta no es válida, asigna "Usuario" por defecto.
-        - Genera un ID único con el prefijo según tipo y un UUID acortado (por ejemplo, "us_ab12cd34" para usuarios; "te_ab12cd34" para testing).
-        - Guarda el device_id en device_id.txt para futuros usos, este txt es persistente y local al dispositivo, útil para respaldos y migraciones.
-        - Retorna el device_id generado o leído.
-        
-    - función: _load_csv(self, path): Carga un CSV desde el path dado y devuelve un DataFrame.
-    
-        - Comprueba si el archivo existe, en caso contrario lanza una excepción. Esto evita que la app cree nuevos archivos vacíos.
-        - Intenta cargar el CSV usando pd.read_csv().
-        - En caso de error durante la carga, imprime un mensaje y devuelve un DataFrame vacío.
-        
-    - función: get_csv(self, name): Devuelve el DataFrame correspondiente al nombre dado.
-    
-        - Comprueba si name existe en self.dataframes.
-        - Si no existe, lanza una excepción KeyError.
-        - Si existe, devuelve el DataFrame correspondiente.
-        - Forma de acceder a los datos cargados, para centralizar el acceso y evitar errores de path o nombres incorrectos.
-        
-    - función: get_device_id(self): Devuelve el device_id único del dispositivo.
-    
+    Central data management system for GrowFit backend (FastAPI).
+    - Loads and manages CSV data for the API REST endpoints.
+    - Generates a unique device_id if not present.
+    - Provides flexible methods to load and save data for backend logic.
+
+    Usage:
+    - Used exclusively by backend endpoints (not by UI/frontend).
+    - All data access for the API is centralized here.
+    - No direct access from Flutter or any frontend code.
+
+    Methods:
+    - __init__: Initializes the manager, loads CSVs, prepares dataframes.
+    - get_csv(name): Returns the DataFrame for the given CSV name.
+    - get_device_id(): Returns the unique device_id for the device.
     """
 
     def __init__(self, data_dir="data"):

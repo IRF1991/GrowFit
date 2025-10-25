@@ -1,5 +1,3 @@
-// Pantalla MainScreen migrada desde Kivy
-
 import 'package:flutter/material.dart';
 
 /// Pantalla principal (HOME).
@@ -33,6 +31,17 @@ class MainScreen extends StatelessWidget {
                 textStyle: const TextStyle(fontSize: 20),
               ),
               child: const Text('New Routine'),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/user_profile');
+              },
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: 24),
+                textStyle: const TextStyle(fontSize: 20),
+              ),
+              child: const Text('Ver Perfil de Usuario'),
             ),
           ],
         ),
