@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 /// Pantalla de pop-up.
 /// (Pendiente de implementar lógica y UI).
 class PopUpScreen extends StatelessWidget {
+  const PopUpScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

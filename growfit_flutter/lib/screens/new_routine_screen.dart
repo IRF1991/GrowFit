@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 /// Pantalla para crear una nueva rutina.
 /// Incluye campo de texto para el nombre, botón para nuevo ejercicio y botón para volver.
 class NewRoutineScreen extends StatefulWidget {
+  const NewRoutineScreen({Key? key}) : super(key: key);
+
   @override
   _NewRoutineScreenState createState() => _NewRoutineScreenState();
 }
