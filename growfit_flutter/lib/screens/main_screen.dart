@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+import 'package:growfit_flutter/dev_screens/developer_tools_screen.dart';
 
 /// Pantalla principal (HOME).
 /// Muestra el título y un botón para crear una nueva rutina.
 class MainScreen extends StatelessWidget {
-  const MainScreen({Key? key}) : super(key: key);
+  const MainScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +34,24 @@ class MainScreen extends StatelessWidget {
               ),
               child: const Text('New Routine'),
             ),
+            if (kDebugMode) ...[
+              const SizedBox(height: 24),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => const DeveloperToolsScreen(),
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.deepPurple,
+                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  textStyle: const TextStyle(fontSize: 18),
+                ),
+                child: const Text('DEV MODE'),
+              ),
+            ],
             // ...existing code...
           ],
         ),

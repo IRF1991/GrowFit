@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'data_management/device_id_manager.dart';
 
 import 'screens/main_screen.dart';
 import 'screens/routine_screen.dart';
@@ -10,7 +11,11 @@ import 'screens/timer_screen.dart';
 import 'screens/pop_up_screen.dart';
 
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final deviceId = await DeviceIdManager.getDeviceId();
+  // Puedes imprimirlo para debug:
+  // print('Device ID: $deviceId');
   runApp(const GrowFitApp());
 }
 
