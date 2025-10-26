@@ -44,17 +44,20 @@ GrowFit is divided into two independent parts:
 
 ## Data Management and Synchronization
 
-Data management is at the core of GrowFit's architecture. The backend leverages pandas for robust, efficient, and scalable data handling, while the API ensures seamless communication with the frontend. This approach is designed for clarity, maintainability, and future extensibility—key aspects for any data science portfolio project.
+**Frontend (Flutter):**
+- All app logic (routines, exercises, timers, ordering, etc.) and fixed/dynamic data are managed and stored locally on the device (JSON or SQLite recommended).
+- Only logs/history (e.g., session logs, usage events) are synchronized with the backend. Routines, exercises, and other fixed/dynamic data are never sent to the backend.
+- On app start:
+   - If internet is available, all pending logs/history are sent to the backend and then deleted locally.
+   - If not, logs/history are kept locally and sent on the next app start with connection.
 
-- Each data model (user, session, routine, etc.) has its own file in `models/` (e.g., `user.py`, `session.py`).
-- Each model handles its own data flow:
-  - Receives data in JSON format from Flutter via the REST API.
-  - Converts JSON to pandas DataFrame, validates, cleans, and saves/updates the corresponding CSV file.
-  - Reads data from CSV with pandas, processes as needed, and exports to JSON for the REST API.
+**Backend (FastAPI):**
+- Receives logs/history in JSON format from Flutter via the REST API.
+- Converts JSON to pandas DataFrame, validates, cleans, and saves/updates the corresponding CSV file.
+- Reads data from CSV with pandas, processes as needed, and exports to JSON for the REST API (e.g., for predictive features).
 - All validation, cleaning, and persistence logic is centralized in the backend using pandas and CSV files.
 - Data exchange between Flutter and the backend is always in JSON (API REST standard), while internal storage and processing is in CSV.
 - This design keeps the code modular, maintainable, and ready for future migrations or enhancements.
-
 ## Deployment and Development
 
 ### Prerequisites
@@ -96,16 +99,17 @@ Data management is at the core of GrowFit's architecture. The backend leverages 
 
 ```
 GrowFit/
-├── growfit/                # Backend (FastAPI, logic, data)
+├── growfit/                # Backend (FastAPI, data management)
 │   ├── main.py             # FastAPI app entrypoint
 │   ├── api/                # REST endpoints
-│   ├── core/               # Logic and utilities
-│   ├── models/             # Data models
+│   ├── models/             # Data models and data_manager
 │   └── ...
 ├── growfit_flutter/        # Frontend (Flutter UI)
 │   ├── lib/
 │   │   ├── screens/        # Screens
 │   │   ├── services/       # Services to consume the API
+│   │   ├── logic/          # App logic and utilities (Dart)
+│   │   ├── data_management/# Data management (device_id, etc. in Dart)
 │   │   └── config.dart     # Base URL configuration
 ├── data/                   # Data (CSV, ML models, etc.)
 ├── requirements.txt
@@ -120,17 +124,15 @@ GrowFit/
 
 ### Device identification system (`device_id`)
 
-GrowFit uses a unique device identifier (`device_id`) to associate local data and synchronize it with the backend. The behavior is as follows:
+GrowFit uses a unique device identifier (`device_id`) generated and managed in the Flutter app. The updated behavior is as follows:
 
-- When the backend starts, if the file `data/device_id.txt` does not exist, the console will prompt whether the environment is for testing:
-  - If you answer `y` or `Y`, a `device_id` with the prefix `te_` (testing) is generated.
-  - If you answer anything else (or just press Enter), a `device_id` with the prefix `us_` (end user) is generated.
-- The `device_id` is saved in `data/device_id.txt` and reused in future sessions.
-- If you do not answer in the console and perform an action from the UI (e.g., create a new routine), a `device_id` with the prefix `us_` is generated automatically.
-- The system guarantees that a valid `device_id` always exists, even after migrations or accidental file deletions.
-- The `/device_id` endpoint of the REST API exposes the current identifier for frontend queries.
+- When the app starts, Flutter generates a `device_id` with the prefix `us_` (end user) or `te_` (testing) and stores it locally.
+- The `device_id` is used for all data operations and synchronization with the backend.
+- The backend does not generate or manage the `device_id`; it only receives and uses the one provided by Flutter.
+- This ensures the app works offline and the identifier is always available, even after migrations or accidental file deletions.
+- The `/device_id` endpoint of the REST API can be used for validation or synchronization if needed.
 
-This mechanism is fundamental for data management and synchronization between devices, without requiring user authentication.
+This mechanism is fundamental for data management and synchronization between devices, without requiring user authentication. Only logs/history are associated with the device_id; all other data remains local to the device.
 
 ## Technology
 - **Backend**: Python 3.8+, FastAPI, Pandas, ML (future)

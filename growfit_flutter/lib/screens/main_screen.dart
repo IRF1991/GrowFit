@@ -32,17 +32,7 @@ class MainScreen extends StatelessWidget {
               ),
               child: const Text('New Routine'),
             ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/user_profile');
-              },
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 24),
-                textStyle: const TextStyle(fontSize: 20),
-              ),
-              child: const Text('Ver Perfil de Usuario'),
-            ),
+            // ...existing code...
           ],
         ),
       ),
