@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 /// Pantalla de temporizador.
 /// (Pendiente de implementar lógica y UI).
 class TimerScreen extends StatelessWidget {
-  const TimerScreen({Key? key}) : super(key: key);
+  const TimerScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

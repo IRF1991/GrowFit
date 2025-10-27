@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 /// Pantalla de detalles de rutina.
 /// (Pendiente de implementar lógica y UI).
 class RoutineScreen extends StatelessWidget {
-  const RoutineScreen({Key? key}) : super(key: key);
+  const RoutineScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

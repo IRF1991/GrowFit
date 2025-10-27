@@ -1,4 +1,5 @@
 /// Utility functions for handling counters in GrowFit (Dart version).
+library;
 
 int incrementCounter(int counter) => counter + 1;
 

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 /// Pantalla para crear un nuevo ejercicio.
 /// Permite modificar sets y repeticiones, y volver atrás.
 class NewExerciseScreen extends StatefulWidget {
-  const NewExerciseScreen({Key? key}) : super(key: key);
+  const NewExerciseScreen({super.key});
 
   @override
   _NewExerciseScreenState createState() => _NewExerciseScreenState();
