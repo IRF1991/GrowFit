@@ -3,183 +3,143 @@
 **Smart fitness app that grows with you - AI-powered workout recommendations and adaptive progression tracking**
 
 [![Python](https://img.shields.io/badge/Python-3.8%2B-blue.svg)](https://python.org)
-[![Kivy](https://img.shields.io/badge/Kivy-UI%20Framework-orange.svg)](https://kivy.org)
+[![Flutter](https://img.shields.io/badge/Flutter-UI%20Framework-blue.svg)](https://flutter.dev)
+[![FastAPI](https://img.shields.io/badge/FastAPI-Backend-green.svg)](https://fastapi.tiangolo.com)
 [![Status](https://img.shields.io/badge/Status-In%20Development-yellow.svg)](https://github.com)
 
 ## Vision
 
-GrowFit is an intelligent fitness application designed to create personalized workout experiences through advanced data analytics and machine learning. The app learns from user behavior patterns and collaborative data to recommend optimal workout routines and guide progressive improvement.
+GrowFit is your personal training companion that grows with you. More than a fitness tracker, it's an intelligent assistant that learns from your performance and guides your progression journey with adaptive recommendations.
+
+The app combines data analytics and machine learning to act as your gym buddy - tracking your workouts, recognizing when you're ready for the next challenge, and motivating you to push your limits at your own pace.
+
+### Core Philosophy
+
+**Progressive Overload Made Smart**: Instead of generic workout plans, GrowFit analyzes YOUR performance patterns and recommends the next difficulty step when you're consistently ready for it.
+
+**Example**: Master knee push-ups for 3 sessions? GrowFit suggests moving to full push-ups. Crushing diamond push-ups? Time for archer variations. The system adapts to your unique progression speed.
 
 ### Key Features (Planned)
 
-- **AI-Powered Recommendations**: Personalized workout suggestions based on user data and community insights
-- **Advanced Analytics**: Comprehensive tracking of workout performance, adherence, and progression
-- **Adaptive Progression**: Smart exercise difficulty adjustment based on user performance
-- **Cross-Platform**: Built with mobile-first approach using Python and Kivy
-- **Goal-Oriented Training**: Customizable fitness goals with intelligent progression paths
+- **Adaptive Progression System**: Exercise difficulty progressions (1-10 scale) with prerequisite tracking
+- **Performance-Based Recommendations**: ML model analyzes your consistency and suggests next-level exercises when you're ready
+- **Motivation & Gamification**: Unlock achievements, track streaks, celebrate milestones
+- **Exercise Progression Database**: Curated exercise chains from beginner to advanced (e.g., Push-up variations, L-Sit progressions, etc.)
+- **Smart Analytics**: Track not just what you did, but how you're improving over time
+- **Cross-Platform**: Mobile-first approach using Python (backend) and Flutter (frontend)
 
-## Current Status
+## Architecture (2025+)
 
-### Completed
-- Core counter functionality for reps/sets/time tracking
-- Multi-screen navigation system (Kivy-based)
-- Data management system with CSV-based storage
-- User/Testing mode distinction for data integrity
-- Device identification system for user tracking
+GrowFit is divided into two independent parts:
 
-### In Development
-- Timer functionality for rest periods and hold exercises
-- Exercise database with categorization and difficulty levels
-- Routine creation and management system
+- **Backend**: Python + FastAPI
+  - Exposes a REST API for all logic, data management, and ML models.
+  - Accesses data (CSV, models, etc.) and exposes endpoints for the app.
+  - Runs locally for development or in the cloud for production.
 
-### Planned Features
-- Machine learning recommendation engine
-- Nutrition tracking and calculation system
-- Progress analytics and visualization
-- Community-based collaborative filtering
-- Export/import functionality for workout data
+- **Frontend**: Flutter (Dart)
+  - Modern, cross-platform UI (Android/iOS).
+  - Only consumes the backend REST API, never accesses data or internal logic directly.
+  - Base URL configuration in `lib/config.dart`.
 
-## Technology Stack
+## Data Management and Synchronization
 
-- **Backend**: Python 3.13+ (backward compatible to 3.8+)
-- **UI Framework**: Kivy (cross-platform GUI)
-- **Data Processing**: Pandas (CSV handling)
-- **Threading**: Built-in threading for device ID generation
-- **Future ML**: Scikit-learn (planned)
-- **Data Storage**: CSV-based (SQLite migration planned)
-- **Package Management**: setuptools (pip installable)
+**Frontend (Flutter):**
+- All app logic (routines, exercises, timers, ordering, etc.) and fixed/dynamic data are managed and stored locally on the device (JSON or SQLite recommended).
+- Only logs/history (e.g., session logs, usage events) are synchronized with the backend. Routines, exercises, and other fixed/dynamic data are never sent to the backend.
+- On app start:
+   - If internet is available, all pending logs/history are sent to the backend and then deleted locally.
+   - If not, logs/history are kept locally and sent on the next app start with connection.
+
+**Backend (FastAPI):**
+- Receives logs/history in JSON format from Flutter via the REST API.
+- Converts JSON to pandas DataFrame, validates, cleans, and saves/updates the corresponding CSV file.
+- Reads data from CSV with pandas, processes as needed, and exports to JSON for the REST API (e.g., for predictive features).
+- All validation, cleaning, and persistence logic is centralized in the backend using pandas and CSV files.
+- Data exchange between Flutter and the backend is always in JSON (API REST standard), while internal storage and processing is in CSV.
+- This design keeps the code modular, maintainable, and ready for future migrations or enhancements.
+## Deployment and Development
+
+### Prerequisites
+- Python 3.8+
+- pip
+- Flutter 3.x+
+- (Optional) Android Studio/Emulator
+
+### Backend (FastAPI)
+1. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+2. Start the backend:
+   ```bash
+   uvicorn growfit.main:app --reload
+   ```
+3. Access the interactive docs at [http://localhost:8000/docs](http://localhost:8000/docs)
+
+### Frontend (Flutter)
+1. Enter the folder:
+   ```bash
+   cd growfit_flutter
+   ```
+2. Install dependencies:
+   ```bash
+   flutter pub get
+   ```
+3. Set the base URL in `lib/config.dart` according to your environment:
+   - Android emulator: `http://10.0.2.2:8000/api/v1/data`
+   - Physical device: `http://<PC_IP>:8000/api/v1/data`
+   - Production: `https://api.yourapp.com/api/v1/data`
+4. Run the app:
+   ```bash
+   flutter run
+   ```
 
 ## Project Structure
 
 ```
 GrowFit/
-├── growfit/                    # Main package
-│   ├── __init__.py
-│   ├── app.py                  # Main application entry point
-│   ├── config/                 # Configuration files
-│   │   ├── __init__.py
-│   │   └── settings.py         # App settings and constants
-│   ├── core/                   # Core functionality
-│   │   ├── __init__.py
-│   │   ├── data_manager.py     # Data management and device ID
-│   │   └── utils.py            # Utility functions (counters)
-│   ├── models/                 # Data models
-│   │   ├── __init__.py
-│   │   ├── exercise.py         # Exercise model (original: excercise.py)
-│   │   └── routine.py          # Routine model
-│   ├── services/               # Business logic services
-│   │   ├── __init__.py
-│   │   ├── routine_manager.py  # Routine management (original: routines/manager.py)
-│   │   ├── series.py           # Series management (original: routines/series.py)
-│   │   └── timer.py            # Timer functionality (original: timer/timer.py)
-│   └── ui/                     # User interface (reserved for future)
-│       └── __init__.py
-├── tests/                      # Test suite
-│   ├── test_core/             # Core functionality tests
-│   ├── test_models/           # Model tests
-│   ├── integration/           # Integration tests
-│   └── __pycache__/
-├── data/                      # Data files (CSV storage)
-│   ├── app_lifecycle_data.csv
-│   ├── device_id.txt
-│   ├── exercise_data.csv
-│   ├── routines_data.csv
-│   ├── session_data.csv
-│   └── user_profile.csv
-├── requirements.txt           # Production dependencies
-├── setup.py                   # Package installation
-└── README.md                  # This file
+├── growfit/                # Backend (FastAPI, data management)
+│   ├── main.py             # FastAPI app entrypoint
+│   ├── api/                # REST endpoints
+│   ├── models/             # Data models and data_manager
+│   └── ...
+├── growfit_flutter/        # Frontend (Flutter UI)
+│   ├── lib/
+│   │   ├── screens/        # Screens
+│   │   ├── services/       # Services to consume the API
+│   │   ├── logic/          # App logic and utilities (Dart)
+│   │   ├── data_management/# Data management (device_id, etc. in Dart)
+│   │   └── config.dart     # Base URL configuration
+├── data/                   # Data (CSV, ML models, etc.)
+├── requirements.txt
+├── requirements-dev.txt
+└── README.md
 ```
 
-## Installation
+## Important notes
+- The Flutter app never accesses backend data or logic directly.
+- All communication is via the REST API.
+- For offline mode, logic and data must be migrated to Flutter (see internal docs).
 
-### Prerequisites
-- Python 3.13+ (recommended) or 3.8+
-- pip package manager
+### Device identification system (`device_id`)
 
-### Quick Start
-```bash
-# Clone the repository
-git clone https://github.com/IRF1991/GrowFit.git
-cd GrowFit
+GrowFit uses a unique device identifier (`device_id`) generated and managed in the Flutter app. The updated behavior is as follows:
 
-# Create virtual environment (recommended)
-python -m venv venv
-./venv/Scripts/activate  # Windows
-# source venv/bin/activate  # Linux/Mac
+- When the app starts, Flutter generates a `device_id` with the prefix `us_` (end user) or `te_` (testing) and stores it locally.
+- The `device_id` is used for all data operations and synchronization with the backend.
+- The backend does not generate or manage the `device_id`; it only receives and uses the one provided by Flutter.
+- This ensures the app works offline and the identifier is always available, even after migrations or accidental file deletions.
+- The `/device_id` endpoint of the REST API can be used for validation or synchronization if needed.
 
-# Install dependencies
-pip install -r requirements.txt
+This mechanism is fundamental for data management and synchronization between devices, without requiring user authentication. Only logs/history are associated with the device_id; all other data remains local to the device.
 
-# Install the package in development mode
-pip install -e .
+## Technology
+- **Backend**: Python 3.8+, FastAPI, Pandas, ML (future)
+- **Frontend**: Flutter (Dart)
+- **Data**: CSV, ML models
 
-# Run the application
-python growfit/app.py
-```
+## Operation and Philosophy
 
-
-## Data Storage
-
-The application uses CSV files for data persistence:
-
-### Dynamic Data (Active Configuration)
-- **`user_profile.csv`**: User demographics and fitness experience levels
-- **`routines.csv`**: Workout routine definitions and metadata  
-- **`device_id.txt`**: Unique device identifier for user/testing distinction
-
-### Historical Data (ML Training Data)
-Files with `_data.csv` suffix collect historical records for machine learning model training:
-- **`exercise_data.csv`**: Detailed exercise tracking and performance data
-- **`session_data.csv`**: Workout session timestamps and completion status
-- **`routines_data.csv`**: Routine execution history and statistics
-- **`app_lifecycle_data.csv`**: App usage patterns and user retention analytics
-
-## Development Setup
-
-### INFORMACIÓN IMPORTANTE PARA DEVS
-
-**The DataManager (located in `growfit/core/data_manager.py`) distinguishes between real users and testing users to preserve data integrity and facilitate developer testing.**
-
-#### Purpose:
-- Allow developers to have their own testing user version
-- Prevent test data from interfering with real user data
-
-#### How it works:
-1. When running the app on a new device without `device_id.txt`, the console asks: **`¿Modo Testing? (y/N):`** to generate a unique ID
-2. **"y"** generates a testing device_id with prefix `te_` (e.g., `te_7d95bb60`)
-3. **Any other input** generates a normal user device_id with prefix `us_` (e.g., `us_a0d27a7a`)
-4. **If the "Nueva Rutina" button is pressed**, a user device_id will be automatically generated
-
-**The device_id is saved in `data/device_id.txt` to maintain it between sessions.**
-
-
-#### User Types Summary:
-- **Real Users**: Device ID prefix `us_` (e.g., `us_a0d27a7a`)
-- **Testing Users**: Device ID prefix `te_` (e.g., `te_7d95bb60`)
-
-
-
-
-
-## Branches
-
-- **`main`**: Stable code
-- **`testing`**: Development
-
-## Roadmap
-
-1. **Phase 1**: Core functionality (Exercise tracking, Timers) ✅
-2. **Phase 2**: Enhanced UI and routine management 🚧
-3. **Phase 3**: Data analytics and basic recommendations
-4. **Phase 4**: Machine learning integration
-5. **Phase 5**: Mobile deployment and advanced features
-
-## License
-
-This project is for educational and portfolio purposes.
-
-## Author
-
-**Ismael** - [GitHub](https://github.com/IRF1991)
+GrowFit is an intelligent training app that adapts exercise progression to your pace, using data analytics and personalized recommendations. See the internal documentation and code comments for details on progression logic, routine management, and general operation.
 

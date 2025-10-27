@@ -1,4 +1,4 @@
-# Development dependencies for GrowFit
+# Development dependencies for GrowFit Backend
 
 # Testing
 pytest>=7.0.0
