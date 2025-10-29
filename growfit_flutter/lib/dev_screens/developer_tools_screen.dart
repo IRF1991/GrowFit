@@ -18,7 +18,7 @@ class _DeveloperToolsScreenState extends State<DeveloperToolsScreen> {
     final id = await DeviceIdManager.getDeviceId();
     setState(() {
       _deviceId = id;
-      _status = 'Device ID cargado';
+      _status = 'Device ID loaded';
     });
   }
 
@@ -27,7 +27,7 @@ class _DeveloperToolsScreenState extends State<DeveloperToolsScreen> {
     setState(() {
       _deviceId = null;
       _deviceIdPath = path;
-      _status = 'device_id.txt borrado';
+      _status = 'device_id.txt deleted';
     });
   }
 
@@ -35,7 +35,7 @@ class _DeveloperToolsScreenState extends State<DeveloperToolsScreen> {
     final id = await DeviceIdManager.getDeviceId();
     setState(() {
       _deviceId = id;
-      _status = 'Device ID regenerado';
+      _status = 'New Device ID generated';
     });
   }
 
@@ -66,14 +66,14 @@ class _DeveloperToolsScreenState extends State<DeveloperToolsScreen> {
                 Expanded(
                   child: ElevatedButton(
                     onPressed: _deleteDeviceId,
-                    child: const Text('Borrar device_id.txt'),
+                    child: const Text('Delete device_id.txt'),
                   ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
                   child: ElevatedButton(
                     onPressed: _regenerateDeviceId,
-                    child: const Text('Regenerar device_id'),
+                    child: const Text('New device_id'),
                   ),
                 ),
               ],

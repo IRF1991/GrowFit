@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 
-/// Pantalla de detalles de ejercicio.
-/// (Pendiente de implementar lógica y UI).
+/// Screen to view and edit an exercise.
+/// (Logic and UI pending implementation.)
 class ExerciseScreen extends StatelessWidget {
   const ExerciseScreen({super.key});
 
@@ -12,6 +12,7 @@ class ExerciseScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('Exercise')), 
       body: const Center(
+        // Placeholder for exercise details and editing UI
         child: Text(
           'Exercise Screen (to be implemented)',
           style: TextStyle(fontSize: 22),

@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 
-/// Pantalla para crear una nueva rutina.
-/// Incluye campo de texto para el nombre, botón para nuevo ejercicio y botón para volver.
+/// Screen for creating a new routine.
+/// Includes a text field for the routine name, button to add a new exercise, and back navigation.
 class NewRoutineScreen extends StatefulWidget {
   const NewRoutineScreen({super.key});
 
@@ -30,12 +30,14 @@ class _NewRoutineScreenState extends State<NewRoutineScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            // Title of the screen
             const Text(
               'NEW ROUTINE',
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 40),
             ),
             const SizedBox(height: 30),
+            // Text field for entering the routine name
             TextField(
               controller: _routineNameController,
               textAlign: TextAlign.center,
@@ -47,6 +49,7 @@ class _NewRoutineScreenState extends State<NewRoutineScreen> {
               ),
             ),
             const SizedBox(height: 30),
+            // Button to add a new exercise to the routine
             ElevatedButton(
               onPressed: () {
                 Navigator.pushNamed(context, '/new_exercise');
@@ -58,6 +61,10 @@ class _NewRoutineScreenState extends State<NewRoutineScreen> {
               child: const Text('New Exercise'),
             ),
             const SizedBox(height: 10),
+            // TODO: Add a list of exercises added to the routine here
+            // (This will display the exercises as the user adds them)
+            // ...
+            // Button to go back to the previous screen
             ElevatedButton(
               onPressed: () {
                 Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);

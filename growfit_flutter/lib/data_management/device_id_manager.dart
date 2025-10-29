@@ -38,8 +38,8 @@ class DeviceIdManager {
     print('[DeviceIdManager] Intentando acceder a: \'${file.path}\'');
     if (await file.exists()) {
       final id = await file.readAsString();
-  print('[DeviceIdManager] Leído device_id: $id');
-  print('[DeviceIdManager] Ruta real: ${file.path}');
+      print('[DeviceIdManager] Leído device_id: $id');
+      print('[DeviceIdManager] Ruta real: ${file.path}');
       if (id.trim().isNotEmpty) {
         return id.trim();
       }
@@ -47,8 +47,8 @@ class DeviceIdManager {
     final isTesting = kDebugMode;
     final newId = _generateDeviceId(isTesting: isTesting);
     await file.writeAsString(newId);
-  print('[DeviceIdManager] Generado y guardado device_id: $newId');
-  print('[DeviceIdManager] Ruta real: ${file.path}');
+    print('[DeviceIdManager] Generado y guardado device_id: $newId');
+    print('[DeviceIdManager] Ruta real: ${file.path}');
     return newId;
   }
 }
